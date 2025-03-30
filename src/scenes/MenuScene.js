@@ -11,9 +11,14 @@ class MenuScene extends Phaser.Scene {
             config.height / 600
         );
         
-        // Son de clic pour les boutons
-        // Note: Nous utilisons un son vide pour éviter les erreurs
-        this.clickSound = this.sound.add('click', { volume: 0.8 });
+        // Son de clic pour les boutons - gestion silencieuse des erreurs
+        try {
+            this.clickSound = this.sound.add('click', { volume: 0.8 });
+        } catch (e) {
+            // Créer un son vide si le son n'existe pas
+            this.clickSound = { play: function() {} };
+            console.log("Son 'click' non disponible");
+        }
         
         // Ajouter le logo
         const logo = this.add.image(config.width / 2, config.height * 0.25, 'logo');
@@ -62,6 +67,20 @@ class MenuScene extends Phaser.Scene {
             }
         );
         creditsText.setOrigin(1);
+        
+        // Ajouter du texte de debug pour aider
+        const debugText = this.add.text(
+            10,
+            10,
+            'Placeholders activés - Les assets sont générés dynamiquement',
+            {
+                fontSize: '14px',
+                fill: '#FFFFFF',
+                fontFamily: 'Arial, sans-serif',
+                backgroundColor: '#333333',
+                padding: { x: 5, y: 5 }
+            }
+        );
     }
     
     createGameOptions() {
@@ -119,7 +138,12 @@ class MenuScene extends Phaser.Scene {
         });
         
         tutorialButton.on('pointerdown', () => {
-            this.clickSound.play();
+            console.log("Bouton tutoriel cliqué!");
+            try {
+                this.clickSound.play();
+            } catch (e) {
+                console.log("Erreur lors de la lecture du son");
+            }
             this.showTutorial();
         });
     }
@@ -154,43 +178,122 @@ class MenuScene extends Phaser.Scene {
         });
         
         button.on('pointerdown', () => {
-            this.clickSound.play();
-            this.startGame(level);
+            console.log("Bouton niveau cliqué:", level);
+            try {
+                this.clickSound.play();
+            } catch (e) {
+                console.log("Erreur lors de la lecture du son");
+            }
+            this.startGamePlaceholder(level);
         });
         
         return button;
     }
     
     startGame(level) {
+        console.log("Démarrage du jeu au niveau:", level);
         // Définir le niveau dans le registre global
         this.registry.set('level', level);
         
-        // Afficher un message de démarrage
-        const startingText = this.add.text(
-            config.width / 2,
+        // Démarrer la scène de jeu
+        this.scene.start('GameScene');
+    }
+    
+    startGamePlaceholder(level) {
+        console.log("Démarrage du mode placeholder au niveau:", level);
+        // Définir le niveau dans le registre global
+        this.registry.set('level', level);
+        
+        // Créer un écran de remplacement pour GameScene
+        const fullScreenCover = this.add.rectangle(
+            config.width / 2, 
             config.height / 2,
-            'Démarrage du jeu...',
+            config.width,
+            config.height,
+            0x000000,
+            0.7
+        );
+        
+        // Panneau d'information
+        const infoPanel = this.add.image(config.width / 2, config.height / 2, 'panel');
+        infoPanel.setScale(1.2);
+        
+        // Titre
+        const title = this.add.text(
+            config.width / 2,
+            config.height / 2 - 100,
+            'MODE DE JEU PRÉLIMINAIRE',
             {
-                fontSize: '30px',
+                fontSize: '24px',
+                fill: '#FFFFFF',
                 fontFamily: 'Arial, sans-serif',
-                fill: '#fff',
-                stroke: '#000',
-                strokeThickness: 4
+                stroke: '#000000',
+                strokeThickness: 3
             }
         );
-        startingText.setOrigin(0.5);
-        startingText.depth = 1000;
+        title.setOrigin(0.5);
         
-        // Ajouter un message temporaire (puisque GameScene n'est pas encore implémentée)
-        this.time.delayedCall(1000, () => {
-            // Note: Nous redémarrons simplement MenuScene pour le moment
-            // puisque GameScene n'est pas complètement implémentée
-            this.registry.set('level', level);
-            this.scene.start('MenuScene');
+        // Message explicatif
+        const messageText = this.add.text(
+            config.width / 2,
+            config.height / 2,
+            [
+                "Cette version utilise des placeholders graphiques",
+                "pour permettre le développement sans tous les assets.",
+                "",
+                "GameScene n'est pas encore complètement adaptée",
+                "aux placeholders. Pour continuer le développement,",
+                "vous pouvez créer les assets manquants ou adapter",
+                "GameScene pour utiliser les placeholders."
+            ],
+            {
+                fontSize: '18px',
+                fill: '#FFFFFF',
+                fontFamily: 'Arial, sans-serif',
+                align: 'center'
+            }
+        );
+        messageText.setOrigin(0.5);
+        
+        // Bouton de retour
+        const backButton = this.add.image(config.width / 2, config.height / 2 + 120, 'button');
+        
+        const backText = this.add.text(
+            config.width / 2,
+            config.height / 2 + 120,
+            'Retour au menu',
+            {
+                fontSize: '18px',
+                fill: '#000',
+                fontFamily: 'Arial, sans-serif'
+            }
+        );
+        backText.setOrigin(0.5);
+        
+        // Rendre le bouton interactif
+        backButton.setInteractive();
+        
+        backButton.on('pointerover', () => {
+            backButton.setTexture('button_hover');
+        });
+        
+        backButton.on('pointerout', () => {
+            backButton.setTexture('button');
+        });
+        
+        backButton.on('pointerdown', () => {
+            // Supprimer tous les éléments
+            fullScreenCover.destroy();
+            infoPanel.destroy();
+            title.destroy();
+            messageText.destroy();
+            backButton.destroy();
+            backText.destroy();
         });
     }
     
     showTutorial() {
+        console.log("Affichage du tutoriel");
         // Créer un panneau pour le tutoriel
         const tutorialPanel = this.add.image(config.width / 2, config.height / 2, 'panel');
         tutorialPanel.setScale(1.2);
@@ -265,7 +368,12 @@ class MenuScene extends Phaser.Scene {
         });
         
         closeButton.on('pointerdown', () => {
-            this.clickSound.play();
+            console.log("Fermeture du tutoriel");
+            try {
+                this.clickSound.play();
+            } catch (e) {
+                console.log("Erreur lors de la lecture du son");
+            }
             tutorialPanel.destroy();
             tutorialTitle.destroy();
             instructionTexts.forEach(text => text.destroy());
