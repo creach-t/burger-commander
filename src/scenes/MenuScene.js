@@ -11,11 +11,8 @@ class MenuScene extends Phaser.Scene {
             config.height / 600
         );
         
-        // Lancer la musique du menu
-        this.music = this.sound.add('menu_music', { loop: true, volume: 0.5 });
-        this.music.play();
-        
-        // Effet sonore pour les boutons
+        // Son de clic pour les boutons
+        // Note: Nous utilisons un son vide pour éviter les erreurs
         this.clickSound = this.sound.add('click', { volume: 0.8 });
         
         // Ajouter le logo
@@ -165,14 +162,32 @@ class MenuScene extends Phaser.Scene {
     }
     
     startGame(level) {
-        // Arrêter la musique du menu
-        this.music.stop();
-        
         // Définir le niveau dans le registre global
         this.registry.set('level', level);
         
-        // Démarrer la scène de jeu
-        this.scene.start('GameScene');
+        // Afficher un message de démarrage
+        const startingText = this.add.text(
+            config.width / 2,
+            config.height / 2,
+            'Démarrage du jeu...',
+            {
+                fontSize: '30px',
+                fontFamily: 'Arial, sans-serif',
+                fill: '#fff',
+                stroke: '#000',
+                strokeThickness: 4
+            }
+        );
+        startingText.setOrigin(0.5);
+        startingText.depth = 1000;
+        
+        // Ajouter un message temporaire (puisque GameScene n'est pas encore implémentée)
+        this.time.delayedCall(1000, () => {
+            // Note: Nous redémarrons simplement MenuScene pour le moment
+            // puisque GameScene n'est pas complètement implémentée
+            this.registry.set('level', level);
+            this.scene.start('MenuScene');
+        });
     }
     
     showTutorial() {
@@ -205,6 +220,8 @@ class MenuScene extends Phaser.Scene {
         ];
         
         const instructionsY = config.height / 2 - 80;
+        let instructionTexts = [];
+        
         instructions.forEach((instruction, index) => {
             const text = this.add.text(
                 config.width / 2 - 180,
@@ -217,6 +234,7 @@ class MenuScene extends Phaser.Scene {
                 }
             );
             text.setOrigin(0, 0.5);
+            instructionTexts.push(text);
         });
         
         // Bouton pour fermer le tutoriel
@@ -250,9 +268,7 @@ class MenuScene extends Phaser.Scene {
             this.clickSound.play();
             tutorialPanel.destroy();
             tutorialTitle.destroy();
-            instructions.forEach((_, index) => {
-                this.children.getAt(this.children.length - 1).destroy();
-            });
+            instructionTexts.forEach(text => text.destroy());
             closeButton.destroy();
             closeText.destroy();
         });

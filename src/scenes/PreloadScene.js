@@ -5,59 +5,19 @@ class PreloadScene extends Phaser.Scene {
     }
     
     preload() {
-        // Créer un écran de chargement
-        this.createLoadingScreen();
+        // Créer des textures basiques pour remplacer les assets manquants
+        this.createPlaceholderTextures();
         
-        // Charger les images d'interface utilisateur
-        this.loadUIAssets();
-        
-        // Charger les images des ingrédients
-        this.loadIngredientAssets();
-        
-        // Charger les sons et la musique
-        this.loadAudioAssets();
-        
-        // Charger les sprites des personnages
-        this.loadCharacterAssets();
-        
-        // Charger les fonds d'écran
-        this.loadBackgroundAssets();
+        // Passer à la scène de menu directement
+        // Note: Nous sautons le chargement des assets pour éviter les erreurs
     }
     
     create() {
-        // Créer les animations
-        this.createAnimations();
-        
-        // Passer à la scène de menu après un court délai
-        this.time.delayedCall(500, () => {
-            this.scene.start('MenuScene');
-        });
-    }
-    
-    createLoadingScreen() {
-        // Afficher le logo du jeu
-        const logo = this.add.image(config.width / 2, config.height / 3, 'logo');
-        logo.setScale(0.5);
-        
-        // Créer une barre de chargement
-        const progressBarBg = this.add.image(
-            config.width / 2,
-            config.height * 0.65,
-            'loading_bar_bg'
-        );
-        
-        const progressBar = this.add.image(
-            config.width / 2 - progressBarBg.width / 2,
-            config.height * 0.65,
-            'loading_bar_fill'
-        );
-        progressBar.setOrigin(0, 0.5);
-        
-        // Texte de chargement
+        // Afficher un message de chargement
         const loadingText = this.add.text(
             config.width / 2,
-            config.height * 0.75,
-            'Chargement...',
+            config.height / 2,
+            'Chargement terminé!',
             {
                 fontSize: '24px',
                 fill: '#fff',
@@ -66,109 +26,92 @@ class PreloadScene extends Phaser.Scene {
         );
         loadingText.setOrigin(0.5);
         
-        // Mettre à jour la barre de progression pendant le chargement
-        this.load.on('progress', (value) => {
-            progressBar.scaleX = value;
-        });
-        
-        // Mettre à jour le texte avec les ressources chargées
-        this.load.on('fileprogress', (file) => {
-            loadingText.setText(`Chargement: ${file.key}`);
-        });
-        
-        // Nettoyer les événements une fois terminé
-        this.load.on('complete', () => {
-            loadingText.setText('Chargement terminé!');
+        // Passer à la scène de menu après un court délai
+        this.time.delayedCall(1000, () => {
+            this.scene.start('MenuScene');
         });
     }
     
-    loadUIAssets() {
-        // Éléments d'interface
-        this.load.image('button', 'assets/images/ui/button.png');
-        this.load.image('button_hover', 'assets/images/ui/button_hover.png');
-        this.load.image('panel', 'assets/images/ui/panel.png');
-        this.load.image('speech_bubble', 'assets/images/ui/speech_bubble.png');
-        this.load.image('score_panel', 'assets/images/ui/score_panel.png');
-        this.load.image('timer_bg', 'assets/images/ui/timer_bg.png');
-        this.load.image('timer_fill', 'assets/images/ui/timer_fill.png');
-        this.load.image('plate', 'assets/images/ui/plate.png');
-        this.load.image('check', 'assets/images/ui/check.png');
-        this.load.image('cross', 'assets/images/ui/cross.png');
-    }
-    
-    loadIngredientAssets() {
-        // Pains
-        this.load.image('pain_normal', 'assets/images/ingredients/pain_normal.png');
-        this.load.image('pain_complet', 'assets/images/ingredients/pain_complet.png');
-        this.load.image('pain_brioche', 'assets/images/ingredients/pain_brioche.png');
+    createPlaceholderTextures() {
+        // Créer des rectangles colorés basiques pour remplacer les images manquantes
         
-        // Viandes
-        this.load.image('viande_boeuf', 'assets/images/ingredients/viande_boeuf.png');
-        this.load.image('viande_poulet', 'assets/images/ingredients/viande_poulet.png');
-        this.load.image('viande_vege', 'assets/images/ingredients/viande_vege.png');
+        // Textures de base pour l'interface
+        this.createColoredRectTexture('logo', 0xff0000, 200, 100);
+        this.createColoredRectTexture('loading_bar_bg', 0x333333, 300, 30);
+        this.createColoredRectTexture('loading_bar_fill', 0x00ff00, 300, 30);
+        this.createColoredRectTexture('button', 0x0000ff, 200, 50);
+        this.createColoredRectTexture('button_hover', 0x00aaff, 200, 50);
+        this.createColoredRectTexture('panel', 0x999999, 400, 300);
+        this.createColoredRectTexture('speech_bubble', 0xffff00, 200, 150);
+        this.createColoredRectTexture('score_panel', 0xff9900, 200, 100);
+        this.createColoredRectTexture('timer_bg', 0x666666, 200, 30);
+        this.createColoredRectTexture('timer_fill', 0xff0000, 200, 30);
+        this.createColoredRectTexture('plate', 0xaaaaaa, 100, 100);
+        this.createColoredRectTexture('check', 0x00ff00, 50, 50);
+        this.createColoredRectTexture('cross', 0xff0000, 50, 50);
         
-        // Fromages
-        this.load.image('fromage_cheddar', 'assets/images/ingredients/fromage_cheddar.png');
-        this.load.image('fromage_emmental', 'assets/images/ingredients/fromage_emmental.png');
-        this.load.image('fromage_bleu', 'assets/images/ingredients/fromage_bleu.png');
+        // Ingrédients
+        const ingredientColors = {
+            'pain_normal': 0xddaa77, 
+            'pain_complet': 0xbb7744, 
+            'pain_brioche': 0xffcc88,
+            'viande_boeuf': 0x884400, 
+            'viande_poulet': 0xffddaa, 
+            'viande_vege': 0x44aa44,
+            'fromage_cheddar': 0xffbb22, 
+            'fromage_emmental': 0xffffaa, 
+            'fromage_bleu': 0xaaddff,
+            'sauce_ketchup': 0xff0000, 
+            'sauce_mayo': 0xffffdd, 
+            'sauce_bbq': 0x883300,
+            'legume_salade': 0x00dd00, 
+            'legume_tomate': 0xff4444, 
+            'legume_oignon': 0xffddff
+        };
         
-        // Sauces
-        this.load.image('sauce_ketchup', 'assets/images/ingredients/sauce_ketchup.png');
-        this.load.image('sauce_mayo', 'assets/images/ingredients/sauce_mayo.png');
-        this.load.image('sauce_bbq', 'assets/images/ingredients/sauce_bbq.png');
+        for (const [key, color] of Object.entries(ingredientColors)) {
+            this.createColoredRectTexture(key, color, 80, 20);
+        }
         
-        // Légumes
-        this.load.image('legume_salade', 'assets/images/ingredients/legume_salade.png');
-        this.load.image('legume_tomate', 'assets/images/ingredients/legume_tomate.png');
-        this.load.image('legume_oignon', 'assets/images/ingredients/legume_oignon.png');
-    }
-    
-    loadAudioAssets() {
-        // Effets sonores
-        this.load.audio('click', 'assets/audio/click.mp3');
-        this.load.audio('success', 'assets/audio/success.mp3');
-        this.load.audio('error', 'assets/audio/error.mp3');
-        this.load.audio('ingredient_drop', 'assets/audio/ingredient_drop.mp3');
-        this.load.audio('time_warning', 'assets/audio/time_warning.mp3');
+        // Personnages
+        this.createColoredRectTexture('client', 0x996633, 100, 200);
+        this.createColoredRectTexture('client_angry', 0xff6633, 100, 200);
+        this.createColoredRectTexture('client_happy', 0x66ff33, 100, 200);
+        this.createColoredRectTexture('chef', 0xffffff, 100, 200);
         
-        // Musique de fond
-        this.load.audio('menu_music', 'assets/audio/menu_music.mp3');
-        this.load.audio('game_music', 'assets/audio/game_music.mp3');
-    }
-    
-    loadCharacterAssets() {
-        // Sprites des clients
-        this.load.image('client', 'assets/images/characters/client.png');
-        this.load.image('client_angry', 'assets/images/characters/client_angry.png');
-        this.load.image('client_happy', 'assets/images/characters/client_happy.png');
-        
-        // Sprite du joueur/chef
-        this.load.image('chef', 'assets/images/characters/chef.png');
-    }
-    
-    loadBackgroundAssets() {
         // Fonds d'écran
-        this.load.image('bg_menu', 'assets/images/backgrounds/bg_menu.png');
-        this.load.image('bg_game', 'assets/images/backgrounds/bg_game.png');
-        this.load.image('bg_gameover', 'assets/images/backgrounds/bg_gameover.png');
-        this.load.image('counter', 'assets/images/backgrounds/counter.png');
+        this.createColoredRectTexture('bg_menu', 0x333333, config.width, config.height);
+        this.createColoredRectTexture('bg_game', 0x227722, config.width, config.height);
+        this.createColoredRectTexture('bg_gameover', 0x772222, config.width, config.height);
+        this.createColoredRectTexture('counter', 0x664422, 800, 100);
+        
+        // Créer des sons vides pour éviter les erreurs
+        this.createEmptySoundAsset('click');
+        this.createEmptySoundAsset('success');
+        this.createEmptySoundAsset('error');
+        this.createEmptySoundAsset('ingredient_drop');
+        this.createEmptySoundAsset('time_warning');
+        this.createEmptySoundAsset('menu_music');
+        this.createEmptySoundAsset('game_music');
     }
     
-    createAnimations() {
-        // Animation pour les ingrédients
-        this.anims.create({
-            key: 'ingredient_bounce',
-            frames: this.anims.generateFrameNumbers('ingredient_sheet', { start: 0, end: 5 }),
-            frameRate: 10,
-            repeat: 0
-        });
+    createColoredRectTexture(key, color, width, height) {
+        // Créer une texture basique colorée
+        const graphics = this.add.graphics();
+        graphics.fillStyle(color, 1);
+        graphics.fillRect(0, 0, width, height);
         
-        // Animation pour le chef
-        this.anims.create({
-            key: 'chef_idle',
-            frames: this.anims.generateFrameNumbers('chef_sheet', { start: 0, end: 3 }),
-            frameRate: 5,
-            repeat: -1
-        });
+        // Dessiner un texte simple sur la texture
+        graphics.lineStyle(2, 0x000000, 1);
+        graphics.strokeRect(0, 0, width, height);
+        
+        // Générer une texture à partir du graphique
+        graphics.generateTexture(key, width, height);
+        graphics.destroy();
+    }
+    
+    createEmptySoundAsset(key) {
+        // Ajouter un audio vide pour éviter les erreurs
+        this.cache.audio.add(key, { });
     }
 }
