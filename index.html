@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burger Commander</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Inclure Phaser à partir de CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+</head>
+<body>
+    <div id="game-container"></div>
+    
+    <!-- Charger les scènes dans l'ordre -->
+    <script src="src/config.js"></script>
+    <script src="src/objects/Ingredient.js"></script>
+    <script src="src/objects/Client.js"></script>
+    <script src="src/objects/Order.js"></script>
+    <script src="src/scenes/BootScene.js"></script>
+    <script src="src/scenes/PreloadScene.js"></script>
+    <script src="src/scenes/MenuScene.js"></script>
+    <script src="src/scenes/GameScene.js"></script>
+    <script src="src/scenes/GameOverScene.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
