@@ -1,54 +1,79 @@
 # Burger Commander
 
-Un jeu simple de commande de burger dans le terminal. Prenez les commandes des clients et préparez les burgers avec précision pour gagner des points!
+Un jeu de commande de burger en 2D créé avec Phaser 3. Préparez les burgers avec précision pour satisfaire vos clients et gagner des points!
 
 ## Description
 
-Burger Commander est un jeu de simulation où vous jouez le rôle d'un employé de restaurant de burgers. Vous devez prendre les commandes des clients et préparer les burgers selon leurs demandes. Plus vous êtes précis, plus vous gagnez de points!
+Burger Commander est un jeu de simulation où vous jouez le rôle d'un employé de restaurant de burgers. Les clients passent des commandes et vous devez assembler les ingrédients dans le bon ordre pour créer le burger parfait. Plus vous êtes rapide et précis, plus vous gagnez de points!
 
 ## Fonctionnalités
 
-- Interface en ligne de commande simple et intuitive
-- Plusieurs ingrédients à choisir (pain, viande, fromage, sauce, légume)
-- Système de points basé sur la précision des commandes
-- 10 tours de jeu par partie
+- Interface graphique 2D créée avec Phaser 3
+- Drag & drop des ingrédients pour assembler les burgers
+- Plusieurs niveaux de difficulté
+- Système de score et de temps
+- Effets sonores et animations
 
-## Comment jouer
+## Captures d'écran
 
-1. Clonez ce dépôt sur votre machine locale
-2. Assurez-vous d'avoir Python 3 installé
-3. Exécutez le jeu avec la commande: `python burger_game.py`
-
-## Capture d'écran
-
-```
-🍔 PRÉPARATION DU BURGER:
---------------------
-
-Options pour pain:
-1. normal
-2. complet
-3. brioche
-
-Choisissez le pain (1-3): 
-```
+![Capture d'écran du jeu](screenshots/gameplay.png)
 
 ## Prérequis
 
-- Python 3.6 ou supérieur
+- Un navigateur web moderne (Chrome, Firefox, Safari, Edge)
+- Pour le développement : Node.js et npm
 
-## Installation
+## Installation et lancement
 
+### Pour jouer
+
+1. Clonez ce dépôt sur votre machine locale
 ```bash
-# Cloner le dépôt
 git clone https://github.com/creach-t/burger-commander.git
-
-# Accéder au répertoire du projet
-cd burger-commander
-
-# Lancer le jeu
-python burger_game.py
 ```
+
+2. Ouvrez le fichier `index.html` dans votre navigateur
+```bash
+cd burger-commander
+# Ouvrez index.html dans votre navigateur préféré
+```
+
+### Pour développer
+
+1. Installez les dépendances
+```bash
+npm install
+```
+
+2. Lancez le serveur de développement
+```bash
+npm start
+```
+
+## Structure du projet
+
+```
+burger-commander/
+├── assets/             # Images, sons et autres ressources
+│   ├── images/         # Sprites et images du jeu
+│   ├── audio/          # Effets sonores et musiques
+│   └── fonts/          # Polices personnalisées
+├── src/                # Code source du jeu
+│   ├── scenes/         # Scènes Phaser (Menu, Jeu, GameOver, etc.)
+│   ├── objects/        # Objets du jeu (Ingrédients, Clients, etc.)
+│   └── config.js       # Configuration de Phaser
+├── index.html          # Page HTML principale
+├── style.css           # Styles CSS
+└── main.js             # Point d'entrée JavaScript
+```
+
+## Comment jouer
+
+1. Les clients passent leur commande en haut de l'écran
+2. Sélectionnez les ingrédients dans l'ordre (bas -> haut)
+3. Déposez-les dans la zone de préparation
+4. Validez la commande quand vous avez terminé
+5. Soyez rapide pour obtenir un bonus de temps!
 
 ## Licence
 
