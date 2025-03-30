@@ -1,0 +1,34 @@
+{
+  "name": "burger-commander",
+  "version": "1.0.0",
+  "description": "Un jeu 2D de commande de burger avec Phaser 3",
+  "main": "main.js",
+  "scripts": {
+    "start": "http-server -c-1 -p 8000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/creach-t/burger-commander.git"
+  },
+  "keywords": [
+    "game",
+    "phaser",
+    "burger",
+    "food",
+    "html5"
+  ],
+  "author": "creach-t",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/creach-t/burger-commander/issues"
+  },
+  "homepage": "https://github.com/creach-t/burger-commander#readme",
+  "devDependencies": {
+    "eslint": "^8.50.0",
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "phaser": "^3.55.2"
+  }
+}
